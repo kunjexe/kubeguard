@@ -1,45 +1,40 @@
 name: KubeGuard Pipeline
 
 on:
-push:
-branches:
-- main
+ push:
+  branches:
+  - main
 
 jobs:
-build-scan-deploy:
-runs-on: ubuntu-latest
+  build-scan-deploy:
+   runs-on: ubuntu-latest
 
+ steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-steps:
-  - name: Checkout Code
-    uses: actions/checkout@v3
+    - name: Install jq
+      run: sudo apt-get update && sudo apt-get install -y jq
 
-  - name: Install jq
-    run: sudo apt-get update && sudo apt-get install -y jq
+    - name: Build Docker Image
+      run: docker build -t my-app:latest .
 
-  - name: Build Docker Image
-    run: docker build -t my-app:latest .
+    - name: Run Trivy Scan via API
+      run: |
+       RESPONSE=$(curl -s -X POST https://thuy-structureless-natasha.ngrok-free.dev/scan \
+       -H "Content-Type: application/json" \
+       -d '{"image":"my-app:latest"}')
 
-  - name: Run Trivy Scan via API
-    run: |
-      RESPONSE=$(curl -s -X POST https://thuy-structureless-natasha.ngrok-free.dev/scan \
-      -H "Content-Type: application/json" \
-      -d '{"image":"my-app:latest"}')
+       echo "$RESPONSE"
 
-      echo "$RESPONSE"
+       HIGH=$(echo $RESPONSE | jq '.high')
+       CRITICAL=$(echo $RESPONSE | jq '.critical')
 
-      HIGH=$(echo $RESPONSE | jq '.high')
-      CRITICAL=$(echo $RESPONSE | jq '.critical')
-
-      echo "HIGH: $HIGH"
-      echo "CRITICAL: $CRITICAL"
-
-      if [ "$CRITICAL" -gt 0 ]; then
-        echo "❌ Critical vulnerabilities found"
+       if [ "$CRITICAL" -gt 0 ]; then
+        echo "Critical vulnerabilities found"
         exit 1
-      fi
+       fi
 
-  - name: Deploy to Kubernetes
-    run: |
-      kubectl apply -f deployment.yaml
-
+    - name: Deploy to Kubernetes
+      run: |
+       kubectl apply -f deployment.yaml
