@@ -1,0 +1,23 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-image-tag
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-image-tag
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+        - resources:
+            kinds:
+              - Deployment
+      validate:
+        message: "Image must have a tag (no implicit latest allowed)"
+        pattern:
+          spec:
+            =(containers):
+              - image: "*:*"

@@ -1,0 +1,42 @@
+name: KubeGuard Pipeline
+
+on:
+push:
+branches:
+- main
+
+jobs:
+build-scan-deploy:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Checkout Code
+    uses: actions/checkout@v3
+
+  - name: Install jq
+    run: sudo apt-get update && sudo apt-get install -y jq
+
+  - name: Build Docker Image
+    run: docker build -t my-app:latest .
+
+  - name: Run Trivy Scan via API
+    run: |
+      RESPONSE=$(curl -s -X POST http://<YOUR-NGROK-URL>/scan \
+      -H "Content-Type: application/json" \
+      -d '{"image":"my-app:latest"}')
+
+      echo "$RESPONSE"
+
+      HIGH=$(echo $RESPONSE | jq '.high')
+      CRITICAL=$(echo $RESPONSE | jq '.critical')
+
+      if [ "$HIGH" -gt 0 ] || [ "$CRITICAL" -gt 0 ]; then
+        echo "❌ Vulnerabilities found. Failing pipeline."
+        exit 1
+      fi
+
+  - name: Deploy to Kubernetes
+    run: |
+      kubectl apply -f deployment.yaml
+```
