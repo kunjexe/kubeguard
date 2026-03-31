@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM gcr.io/distroless/python3
 
 WORKDIR /app
 

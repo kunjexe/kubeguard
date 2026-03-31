@@ -32,8 +32,8 @@ steps:
       CRITICAL=$(echo $RESPONSE | jq '.critical')
 
       if [ "$CRITICAL" -gt 0 ]; then
-        echo "❌ Vulnerabilities found. Failing pipeline."
-        exit 1
+      echo "❌ Critical vulnerabilities found"
+      exit 1
       fi
 
   - name: Deploy to Kubernetes
