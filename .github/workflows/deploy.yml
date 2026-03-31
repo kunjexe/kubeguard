@@ -9,7 +9,7 @@ jobs:
 build-scan-deploy:
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Checkout Code
     uses: actions/checkout@v3
@@ -31,12 +31,15 @@ steps:
       HIGH=$(echo $RESPONSE | jq '.high')
       CRITICAL=$(echo $RESPONSE | jq '.critical')
 
+      echo "HIGH: $HIGH"
+      echo "CRITICAL: $CRITICAL"
+
       if [ "$CRITICAL" -gt 0 ]; then
-      echo "❌ Critical vulnerabilities found"
-      exit 1
+        echo "❌ Critical vulnerabilities found"
+        exit 1
       fi
 
   - name: Deploy to Kubernetes
     run: |
       kubectl apply -f deployment.yaml
-```
+
