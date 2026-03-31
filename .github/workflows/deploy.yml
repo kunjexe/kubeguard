@@ -22,7 +22,7 @@ steps:
 
   - name: Run Trivy Scan via API
     run: |
-      RESPONSE=$(curl -s -X POST http://<YOUR-NGROK-URL>/scan \
+      RESPONSE=$(curl -s -X POST https://thuy-structureless-natasha.ngrok-free.dev/scan \
       -H "Content-Type: application/json" \
       -d '{"image":"my-app:latest"}')
 
