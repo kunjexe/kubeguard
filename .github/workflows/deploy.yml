@@ -36,5 +36,4 @@ jobs:
        fi
 
     - name: Deploy to Kubernetes
-      run: |
-       kubectl apply -f services/scanner/deployment.yaml
+      run: echo "Skipping deployment"
