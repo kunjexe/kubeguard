@@ -8,8 +8,8 @@ on:
 jobs:
   build-scan-deploy:
    runs-on: ubuntu-latest
-
- steps:
+    
+   steps:
     - name: Checkout Code
       uses: actions/checkout@v3
 
