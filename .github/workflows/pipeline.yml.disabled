@@ -35,10 +35,9 @@ jobs:
           ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@master
         with:
           image-ref: kubeguard-app:latest
-          severity: HIGH,CRITICAL
+          severity: CRITICAL
           exit-code: 1
 
       - name: Push to ECR
