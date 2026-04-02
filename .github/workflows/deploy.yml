@@ -21,7 +21,7 @@ jobs:
 
     - name: Run Trivy Scan via API
       run: |
-       RESPONSE=$(curl -s -X POST http://3.236.7.216:8000/scan/github \
+       RESPONSE=$(curl -s -X POST http://3.228.67.50:8000/scan/github \
        -H "Content-Type: application/json" \
        -d '{"image":"my-app:latest"}')
 
