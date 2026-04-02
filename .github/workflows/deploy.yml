@@ -21,7 +21,7 @@ jobs:
 
     - name: Run Trivy Scan via API
       run: |
-       RESPONSE=$(curl -s -X POST https://thuy-structureless-natasha.ngrok-free.dev \
+       RESPONSE=$(curl -s -X POST http://3.236.7.216:8000/scan \
        -H "Content-Type: application/json" \
        -d '{"image":"my-app:latest"}')
 
