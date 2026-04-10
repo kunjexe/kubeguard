@@ -7,6 +7,6 @@ spec:
   selector:
     app: kubeguard
   ports:
-    - port: 5000
-      targetPort: 5000
+    - port: 80
+      targetPort: 8000
       nodePort: 30007

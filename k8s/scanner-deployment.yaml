@@ -13,8 +13,8 @@ spec:
         app: kubeguard
     spec:
       containers:
-      - name: kubeguard-container
-        image: kubeguard-app:v2
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 5000
+        - name: kubeguard-container
+          image: kubeguard-scanner:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
